@@ -4,6 +4,7 @@ import pytest
 import numpy as np
 
 from temgymbasic.model import STEMModel
+from temgymbasic.plotting import plot_model
 
 
 def rotate(radians):
@@ -212,3 +213,19 @@ def test_rays(params_update, nav_shape, sig_shape, fail) -> np.ndarray:
             else:
                 np.testing.assert_allclose(image_px_y, spec_y, rtol=1e-3, atol=1e-3)
                 np.testing.assert_allclose(image_px_x, spec_x, rtol=1e-3, atol=1e-3)
+
+
+def test_plot():
+    params = OverfocusParams(
+        overfocus=0.0001,
+        scan_pixel_size=0.00000001,
+        camera_length=1,
+        detector_pixel_size=0.0001,
+        semiconv=0.01,
+        cy=3,
+        cx=3,
+        scan_rotation=33.3,
+        flip_y=False,
+    )
+    model = make_model(params, nav_shape=(12, 13), sig_shape=(23, 42))
+    fig, ax = plot_model(model=model)

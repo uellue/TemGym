@@ -4,7 +4,7 @@ import matplotlib as mpl
 
 import numpy as np
 from temgymbasic.components import (
-    DoubleDeflector, Lens, Sample, Detector, Biprism, Aperture,
+    DoubleDeflector, Lens, Sample, STEMSample, Detector, Biprism, Aperture,
     Deflector, RadialSpikesBeam, PotentialSample
 )
 
@@ -130,10 +130,15 @@ def plot_model(model, *, plot_params: PlotParams = PlotParams()):
         elif isinstance(component, Sample):
             ax.text(extent, component.z,
                 component.name, fontsize=p.label_fontsize, zorder=1000, va='center')
+            if isinstance(component, STEMSample):
+                # Extent in X direction
+                half_size = component.scan_step_yx[1] * component.scan_shape[1] / 2
+            else:
+                half_size = 0.1
             ax.plot(
                 [
-                    -component.pixel_size*component.shape[1]/2,
-                    component.pixel_size*component.shape[1]/2
+                    -half_size,
+                    half_size
                 ],
                 [component.z, component.z],
                 color='dimgrey',
